@@ -1,6 +1,6 @@
 {
   "app_description": {
-    "message": "AA(아스키 아트/야르오) 작품 속 일본어를 페이지에서 바로 LLM으로 번역합니다"
+    "message": "AA(아스키 아트/야루오계) 작품 속 일본어를 페이지에서 바로 LLM으로 번역합니다"
   },
   "toolbar_select": { "message": "영역 선택" },
   "toolbar_needs_setup": { "message": "⚠ 설정 필요" },
