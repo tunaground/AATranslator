@@ -1,0 +1,36 @@
+{
+  "app_description": {
+    "message": "AA(아스키 아트/야르오) 작품 속 일본어를 페이지에서 바로 LLM으로 번역합니다"
+  },
+  "toolbar_select": { "message": "영역 선택" },
+  "toolbar_needs_setup": { "message": "⚠ 설정 필요" },
+  "toolbar_selecting_hint": { "message": "영역을 클릭하세요" },
+  "toolbar_cancel": { "message": "취소" },
+  "toolbar_block_count": {
+    "message": "$COUNT$ 블록",
+    "placeholders": { "count": { "content": "$1", "example": "42" } }
+  },
+  "toolbar_translate_all": { "message": "전체 번역" },
+  "toolbar_reselect": { "message": "다시 선택" },
+  "toolbar_reset": { "message": "초기화" },
+  "toolbar_highlight_on": { "message": "강조 ON" },
+  "toolbar_highlight_off": { "message": "강조 OFF" },
+  "toolbar_settings": { "message": "설정" },
+  "settings_title": { "message": "AATranslator 설정" },
+  "settings_provider": { "message": "Provider" },
+  "settings_api_key": { "message": "API Key" },
+  "settings_model": { "message": "Model" },
+  "settings_concurrency": { "message": "동시 실행 수" },
+  "settings_target_language": { "message": "번역 대상 언어" },
+  "settings_highlight_color": { "message": "강조 색상" },
+  "settings_save": { "message": "저장" },
+  "settings_close": { "message": "닫기" },
+  "provider_ollama": { "message": "Ollama (로컬)" },
+  "color_light_green": { "message": "연녹색" },
+  "color_light_blue": { "message": "연파랑" },
+  "color_light_yellow": { "message": "연노랑" },
+  "color_light_purple": { "message": "연보라" },
+  "color_light_red": { "message": "연빨강" },
+  "color_transparent": { "message": "투명" },
+  "popup_translate": { "message": "번역" }
+}

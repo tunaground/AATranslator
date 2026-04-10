@@ -1,0 +1,36 @@
+{
+  "app_description": {
+    "message": "Translate Japanese AA (Ascii Art / Yaruo) works in-place using LLMs"
+  },
+  "toolbar_select": { "message": "Select" },
+  "toolbar_needs_setup": { "message": "⚠ Setup required" },
+  "toolbar_selecting_hint": { "message": "Click an area to translate" },
+  "toolbar_cancel": { "message": "Cancel" },
+  "toolbar_block_count": {
+    "message": "$COUNT$ blocks",
+    "placeholders": { "count": { "content": "$1", "example": "42" } }
+  },
+  "toolbar_translate_all": { "message": "Translate All" },
+  "toolbar_reselect": { "message": "Reselect" },
+  "toolbar_reset": { "message": "Reset" },
+  "toolbar_highlight_on": { "message": "HL ON" },
+  "toolbar_highlight_off": { "message": "HL OFF" },
+  "toolbar_settings": { "message": "Settings" },
+  "settings_title": { "message": "AATranslator Settings" },
+  "settings_provider": { "message": "Provider" },
+  "settings_api_key": { "message": "API Key" },
+  "settings_model": { "message": "Model" },
+  "settings_concurrency": { "message": "Concurrency" },
+  "settings_target_language": { "message": "Target Language" },
+  "settings_highlight_color": { "message": "Highlight Color" },
+  "settings_save": { "message": "Save" },
+  "settings_close": { "message": "Close" },
+  "provider_ollama": { "message": "Ollama (local)" },
+  "color_light_green": { "message": "Light green" },
+  "color_light_blue": { "message": "Light blue" },
+  "color_light_yellow": { "message": "Light yellow" },
+  "color_light_purple": { "message": "Light purple" },
+  "color_light_red": { "message": "Light red" },
+  "color_transparent": { "message": "Transparent" },
+  "popup_translate": { "message": "Translate" }
+}

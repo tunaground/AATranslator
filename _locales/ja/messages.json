@@ -1,0 +1,36 @@
+{
+  "app_description": {
+    "message": "AA(アスキーアート/やる夫)作品の日本語をページ上で直接 LLM で翻訳します"
+  },
+  "toolbar_select": { "message": "範囲選択" },
+  "toolbar_needs_setup": { "message": "⚠ 設定が必要" },
+  "toolbar_selecting_hint": { "message": "翻訳する範囲をクリックしてください" },
+  "toolbar_cancel": { "message": "キャンセル" },
+  "toolbar_block_count": {
+    "message": "$COUNT$ ブロック",
+    "placeholders": { "count": { "content": "$1", "example": "42" } }
+  },
+  "toolbar_translate_all": { "message": "すべて翻訳" },
+  "toolbar_reselect": { "message": "再選択" },
+  "toolbar_reset": { "message": "リセット" },
+  "toolbar_highlight_on": { "message": "HL ON" },
+  "toolbar_highlight_off": { "message": "HL OFF" },
+  "toolbar_settings": { "message": "設定" },
+  "settings_title": { "message": "AATranslator 設定" },
+  "settings_provider": { "message": "プロバイダー" },
+  "settings_api_key": { "message": "API キー" },
+  "settings_model": { "message": "モデル" },
+  "settings_concurrency": { "message": "並列実行数" },
+  "settings_target_language": { "message": "翻訳先言語" },
+  "settings_highlight_color": { "message": "ハイライト色" },
+  "settings_save": { "message": "保存" },
+  "settings_close": { "message": "閉じる" },
+  "provider_ollama": { "message": "Ollama (ローカル)" },
+  "color_light_green": { "message": "薄緑" },
+  "color_light_blue": { "message": "薄青" },
+  "color_light_yellow": { "message": "薄黄" },
+  "color_light_purple": { "message": "薄紫" },
+  "color_light_red": { "message": "薄赤" },
+  "color_transparent": { "message": "透明" },
+  "popup_translate": { "message": "翻訳" }
+}
