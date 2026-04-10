@@ -1,0 +1,196 @@
+/* Container selection mode */
+.aat-selectable {
+  outline: 2px dashed rgba(79, 123, 232, 0.5) !important;
+  cursor: crosshair !important;
+}
+.aat-selectable:hover {
+  outline: 2px solid rgba(79, 123, 232, 0.8) !important;
+  background-color: rgba(79, 123, 232, 0.05) !important;
+}
+.aat-selected {
+  outline: 2px solid #4f7be8 !important;
+}
+
+/* Japanese block highlight */
+.aat-block {
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background-color 0.1s;
+}
+.aat-block:hover {
+  background-color: rgba(79, 123, 232, 0.15) !important;
+}
+.aat-block.aat-translating {
+  background-color: rgba(79, 123, 232, 0.1) !important;
+  animation: aat-pulse 1.5s infinite;
+}
+.aat-block.aat-translated {
+  background-color: rgba(34, 197, 94, 0.1) !important;
+}
+
+@keyframes aat-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Floating toolbar */
+.aat-toolbar {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 2147483647;
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #1a1d23;
+  color: #e8eaef;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 12px;
+  align-items: center;
+}
+.aat-toolbar .aat-brand {
+  font-weight: 600;
+  white-space: nowrap;
+}
+.aat-toolbar .aat-ver {
+  color: #9198a5;
+  font-weight: 400;
+  margin-left: 4px;
+}
+.aat-toolbar button {
+  padding: 4px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  font-family: inherit;
+}
+.aat-toolbar .aat-btn-primary {
+  background: #4f7be8;
+  color: #fff;
+}
+.aat-toolbar .aat-btn-primary:hover {
+  background: #3d65cc;
+}
+.aat-toolbar .aat-btn-secondary {
+  background: #374151;
+  color: #e8eaef;
+}
+.aat-toolbar .aat-btn-secondary:hover {
+  background: #4b5563;
+}
+.aat-toolbar .aat-btn-danger {
+  background: #374151;
+  color: #e5484d;
+}
+.aat-toolbar .aat-btn-danger:hover {
+  background: #3a1d1f;
+}
+.aat-toolbar .aat-status {
+  color: #9198a5;
+  margin-left: 4px;
+  white-space: nowrap;
+}
+.aat-toolbar .aat-progress-bar {
+  width: 80px;
+  height: 4px;
+  background: #374151;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.aat-toolbar .aat-progress-fill {
+  height: 100%;
+  background: #4f7be8;
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+
+/* Selection popup */
+.aat-selection-popup {
+  position: absolute;
+  transform: translateX(-50%);
+  z-index: 2147483647;
+  padding: 4px 12px;
+  background: #4f7be8;
+  color: #fff;
+  border-radius: 4px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  user-select: none;
+}
+.aat-selection-popup:hover {
+  background: #3d65cc;
+}
+
+/* Settings modal */
+.aat-settings {
+  position: fixed;
+  bottom: 56px;
+  right: 20px;
+  z-index: 2147483647;
+  width: 300px;
+  padding: 20px;
+  background: #1a1d23;
+  color: #e8eaef;
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 12px;
+  border: 1px solid #2e313b;
+}
+.aat-settings .aat-settings-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #2e313b;
+}
+.aat-settings .aat-settings-group {
+  margin-bottom: 12px;
+}
+.aat-settings label {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+  color: #9198a5;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.aat-settings select,
+.aat-settings input {
+  width: 100%;
+  height: 32px;
+  padding: 0 10px;
+  background: #252830;
+  border: 1px solid #374151;
+  border-radius: 6px;
+  color: #e8eaef;
+  font-size: 12px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.aat-settings select:focus,
+.aat-settings input:focus {
+  border-color: #4f7be8;
+  box-shadow: 0 0 0 2px rgba(79, 123, 232, 0.15);
+}
+.aat-settings .aat-settings-footer {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #2e313b;
+}
+.aat-settings .aat-settings-footer button {
+  flex: 1;
+  height: 32px;
+  border-radius: 6px;
+  font-weight: 500;
+}
