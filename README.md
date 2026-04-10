@@ -161,6 +161,8 @@ AATranslator/
 
 See [PRIVACY.md](PRIVACY.md). In short: nothing leaves your browser except the text you explicitly translate, and it only goes to the LLM provider you chose.
 
+Version history is tracked in [CHANGELOG.md](CHANGELOG.md).
+
 ---
 
 ## 한국어
@@ -292,3 +294,5 @@ AATranslator/
 ### 개인정보
 
 [PRIVACY.md](PRIVACY.md) 참조. 요약: 직접 번역한 텍스트 외에는 브라우저 밖으로 아무것도 나가지 않고, 그 텍스트도 본인이 설정한 LLM provider에게만 전송돼요.
+
+버전별 변경 내역은 [CHANGELOG.md](CHANGELOG.md)에서 확인할 수 있어요.

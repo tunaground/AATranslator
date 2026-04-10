@@ -25,6 +25,7 @@ cp manifest.json "$STAGE/"
 cp -r icons _locales src "$STAGE/"
 [ -f README.md ] && cp README.md "$STAGE/"
 [ -f PRIVACY.md ] && cp PRIVACY.md "$STAGE/"
+[ -f CHANGELOG.md ] && cp CHANGELOG.md "$STAGE/"
 
 ( cd dist && zip -rq "${NAME}.zip" "${NAME}" -x '*.DS_Store' )
 
