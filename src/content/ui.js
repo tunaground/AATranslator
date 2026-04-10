@@ -122,13 +122,13 @@ export function toggleSettings() {
         <option value="ollama">${t("provider_ollama")}</option>
       </select>
     </div>
-    <div class="aat-settings-group" id="aat-s-apikey-row">
-      <label>${t("settings_api_key")}</label>
-      <input type="password" id="aat-s-apikey">
-    </div>
     <div class="aat-settings-group">
       <label>${t("settings_model")}</label>
       <input type="text" id="aat-s-model">
+    </div>
+    <div class="aat-settings-group" id="aat-s-apikey-row">
+      <label>${t("settings_api_key")}</label>
+      <input type="password" id="aat-s-apikey">
     </div>
     <div class="aat-settings-group">
       <label>${t("settings_concurrency")}</label>
