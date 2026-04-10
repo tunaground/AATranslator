@@ -4,7 +4,7 @@ Translate Japanese AA (Ascii Art / Yaruo-style) works in-place on any web page u
 
 > 브라우저에서 일본어 AA(아스키 아트 / 야루오계) 작품을 LLM으로 그 자리에서 번역합니다. ASCII 아트는 그대로 두고 의미 있는 일본어만 번역돼요.
 
-![AATranslator in action — Japanese dialogue translated to Korean while the ASCII art is preserved](docs/images/example.png)
+![AATranslator in action — Japanese dialogue translated to Korean while the ASCII art is preserved](docs/images/demo.png)
 
 ---
 
@@ -89,6 +89,8 @@ Click the **Settings** button on the floating toolbar. All values are stored in 
 | Concurrency | `3` | Parallel in-flight batches (1 / 2 / 3 / 5 / 8 / 10) |
 | Target Language | `한국어` | Translation output language (Korean / English / Japanese) |
 | Highlight Color | Light green | 5 color presets + transparent |
+
+The default **Concurrency** (3) is safe for Gemini's free tier: the rate gate throttles Gemini calls to ~13 RPM regardless of the concurrency setting, so higher values don't increase the effective request rate on Gemini. Concurrency meaningfully increases throughput only for OpenAI, Claude, and Ollama (where no gate applies). You don't need to lower it to 1 just because you're on the free plan.
 
 ### Getting a Gemini API key
 
@@ -238,6 +240,8 @@ Version history is tracked in [CHANGELOG.md](CHANGELOG.md).
 | 동시 실행 수 | `3` | 병렬 배치 수 (1 / 2 / 3 / 5 / 8 / 10) |
 | 번역 대상 언어 | `한국어` | 번역 결과 언어 (한국어 / 영어 / 일본어) |
 | 강조 색상 | 연녹색 | 5가지 프리셋 + 투명 |
+
+기본값 **동시 실행 수**(3)는 Gemini 무료 플랜에서도 안전해요. Gemini 요청은 concurrency 설정과 무관하게 rate gate가 ~13 RPM으로 조절하기 때문에, 값을 높여도 Gemini로 나가는 실제 요청 속도는 변하지 않아요. Concurrency가 실제로 처리량에 영향을 주는 건 OpenAI · Claude · Ollama처럼 게이트가 적용되지 않는 provider뿐이에요. 무료 플랜이라고 해서 1로 낮출 필요 없어요.
 
 ### Gemini API 키 발급
 
