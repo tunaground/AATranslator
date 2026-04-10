@@ -88,6 +88,15 @@
 .aat-toolbar .aat-btn-danger:hover {
   background: #3a1d1f;
 }
+.aat-toolbar .aat-btn-warn {
+  background: #3a2d11;
+  color: #f5a524;
+  border: 1px solid #f5a524;
+  padding: 3px 9px;
+}
+.aat-toolbar .aat-btn-warn:hover {
+  background: #4a3a1a;
+}
 .aat-toolbar .aat-status {
   color: #9198a5;
   margin-left: 4px;

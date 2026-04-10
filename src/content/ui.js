@@ -42,15 +42,20 @@ export function updateToolbar() {
   if (!state.toolbar) return;
 
   const brand = `<span class="aat-brand">AATranslator <span class="aat-ver">v${version()}</span></span>`;
+  const needsSetup =
+    !state.config?.model ||
+    (state.config?.provider !== "ollama" && !state.config?.apiKey);
+  const settingsBtnClass = needsSetup ? "aat-btn-warn" : "aat-btn-secondary";
+  const settingsLabel = needsSetup
+    ? `⚠ ${t("toolbar_settings")}`
+    : t("toolbar_settings");
   const rightBtns =
     `<button class="aat-btn-secondary" id="aat-hl-toggle">${state.highlightOn ? t("toolbar_highlight_on") : t("toolbar_highlight_off")}</button>` +
-    `<button class="aat-btn-secondary" id="aat-settings">${t("toolbar_settings")}</button>`;
+    `<button class="${settingsBtnClass}" id="aat-settings" title="${needsSetup ? t("toolbar_needs_setup") : ""}">${settingsLabel}</button>`;
 
   let middle = "";
   if (state.mode === "idle") {
-    middle =
-      `<button class="aat-btn-primary" id="aat-select">${t("toolbar_select")}</button>` +
-      (state.config ? "" : `<span class="aat-status">${t("toolbar_needs_setup")}</span>`);
+    middle = `<button class="aat-btn-primary" id="aat-select">${t("toolbar_select")}</button>`;
   } else if (state.mode === "selecting") {
     middle =
       `<span class="aat-status">${t("toolbar_selecting_hint")}</span>` +
