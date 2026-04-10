@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "AATranslator",
+  "version": "0.1.0",
+  "default_locale": "ko",
+  "description": "__MSG_app_description__",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": [
+    "https://api.openai.com/*",
+    "https://api.anthropic.com/*",
+    "https://generativelanguage.googleapis.com/*",
+    "http://localhost:11434/*"
+  ],
+  "action": {
+    "default_icon": "icons/icon48.png"
+  },
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "icons": {
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["src/content/*.js", "src/content/*.css"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
