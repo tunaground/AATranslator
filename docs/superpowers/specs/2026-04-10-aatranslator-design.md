@@ -262,7 +262,7 @@ The service worker is the only place that actually calls `fetch`; content script
   "icons": { "48": "icons/icon48.png", "128": "icons/icon128.png" },
   "default_locale": "ko",
   "web_accessible_resources": [
-    { "resources": ["src/content/*.js", "src/content/*.css"], "matches": ["<all_urls>"] }
+    { "resources": ["src/content/*.js", "src/content/*.css", "src/core/*.js"], "matches": ["<all_urls>"] }
   ]
 }
 ```

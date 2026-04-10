@@ -874,7 +874,7 @@ Write `manifest.json`:
   },
   "web_accessible_resources": [
     {
-      "resources": ["src/content/*.js", "src/content/*.css"],
+      "resources": ["src/content/*.js", "src/content/*.css", "src/core/*.js"],
       "matches": ["<all_urls>"]
     }
   ]
