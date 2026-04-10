@@ -40,7 +40,7 @@ Translate Japanese AA (Ascii Art / Yaruo-style) works in-place on any web page u
 - **Translate all** — batch-translate every block in a selected container with configurable concurrency
 - **Manual selection** — drag-select arbitrary text and click the "Translate" popup
 - **4 LLM providers** — OpenAI, Google Gemini, Anthropic Claude, Ollama (local)
-- **Retry with backoff** — automatic 3-attempt retry on 429 / 503 / 529 responses
+- **Rate limiting & retries** — per-provider RPM gate (Gemini free-tier friendly) plus 5-attempt exponential backoff on 429 / 503 / 529
 - **i18n UI** — toolbar and settings available in Korean, English, and Japanese (follows Chrome's language)
 - **Highlight customization** — 6 color presets for translated blocks, or transparent
 - **No telemetry** — settings live in `chrome.storage.sync`; only your translated text is sent to the LLM you configured
@@ -99,6 +99,8 @@ Extra controls:
 | Google Gemini | `generativelanguage.googleapis.com` | `generateContent`, `maxOutputTokens: 8192` |
 | Anthropic Claude | `api.anthropic.com` | Messages API, `anthropic-version: 2023-06-01` |
 | Ollama | `http://localhost:11434` | Local only; no API key needed |
+
+The background worker enforces a minimum **~4.5s interval** between Gemini calls (~13 RPM) to stay safely under the free-tier 15 RPM cap, so you don't need to manage concurrency yourself. Other providers are unthrottled. On top of that, any `429 / 503 / 529` response triggers up to **5 retries** with exponential backoff (max 60s per wait, ~30s cumulative for transient errors).
 
 ### Development
 
@@ -159,7 +161,7 @@ See [PRIVACY.md](PRIVACY.md). In short: nothing leaves your browser except the t
 - **전체 번역** — 선택한 영역 안의 모든 블록을 동시성 설정대로 배치 번역
 - **수동 선택** — 마우스로 드래그한 범위를 "번역" 팝업으로 번역
 - **4개 LLM provider** — OpenAI, Google Gemini, Anthropic Claude, Ollama (로컬)
-- **자동 재시도** — 429 / 503 / 529 응답에 대해 3회 지수 백오프
+- **레이트 리밋 & 재시도** — provider별 RPM 게이트 (Gemini 무료 티어 호환) + 429 / 503 / 529에 대해 5회 지수 백오프
 - **UI 다국어** — 툴바·설정이 한국어·영어·일본어 (크롬 언어에 따라 자동)
 - **강조 색상 커스터마이즈** — 5가지 프리셋 + 투명
 - **텔레메트리 없음** — 설정은 `chrome.storage.sync`에만 저장, 직접 번역한 텍스트만 설정한 LLM으로 전송
@@ -218,6 +220,8 @@ See [PRIVACY.md](PRIVACY.md). In short: nothing leaves your browser except the t
 | Google Gemini | `generativelanguage.googleapis.com` | `generateContent`, `maxOutputTokens: 8192` |
 | Anthropic Claude | `api.anthropic.com` | Messages API, `anthropic-version: 2023-06-01` |
 | Ollama | `http://localhost:11434` | 로컬 전용; API 키 불필요 |
+
+백그라운드 워커는 Gemini 호출 사이에 최소 **~4.5초 간격**(~13 RPM)을 유지해서 무료 티어 15 RPM 한도를 안전하게 지켜요. 동시성은 사용자가 직접 제어하지 않아도 돼요. 다른 provider는 제한 없음. 그 위에 `429 / 503 / 529` 응답이 오면 **최대 5회** 지수 백오프 재시도 (단일 대기 최대 60초, 일시적 에러에는 누적 ~30초 수준).
 
 ### 개발
 
