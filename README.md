@@ -52,6 +52,8 @@ Translate Japanese AA (Ascii Art / Yaruo-style) works in-place on any web page u
 3. The LLM is asked to classify each block as *meaningful* vs *decorative* and return a translation for meaningful ones. Decorative fragments (kanji shading, etc.) are left alone.
 4. Translations are applied in place, preserving line breaks. You can toggle back to the original with a click.
 
+**Batching.** "Translate All" does not send one request per block — blocks are packed into batches by character count (3,000 chars for OpenAI / Gemini / Claude, 1,000 for Ollama) and sent as a single numbered-fragments request. The LLM replies with a JSON array keyed by fragment index. If a batch fails to parse or an index is missing, the affected spans fall back to a smaller batch, and finally to individual per-block calls. Batches run in parallel up to the configured concurrency.
+
 ### Installation
 
 Until the extension is published:
@@ -172,6 +174,8 @@ See [PRIVACY.md](PRIVACY.md). In short: nothing leaves your browser except the t
 2. 백그라운드 서비스 워커가 LLM 호출을 대신 해서 API 키가 페이지 스크립트에 노출되지 않아요.
 3. 각 블록이 *의미 있는 문장*인지 *장식*인지 LLM이 판단하고, 의미 있는 것만 번역본을 돌려줘요. 장식용 한자 음영 등은 그대로 냅둬요.
 4. 번역 결과를 줄바꿈 유지하면서 제자리에 적용. 클릭 한 번이면 원문으로 되돌릴 수 있어요.
+
+**배치 요청.** "전체 번역"은 블록마다 개별 요청을 보내지 않아요 — 블록들을 **문자 수 기준**으로 묶어서 (OpenAI / Gemini / Claude는 3,000자, Ollama는 1,000자) 하나의 번호 매긴 요청으로 전송해요. LLM은 인덱스별 JSON 배열로 답하고, 응답이 파싱 안 되거나 인덱스가 빠지면 해당 블록들만 더 작은 배치 → 최종적으로 개별 호출로 fallback. 배치들은 설정된 동시 실행 수만큼 병렬로 돌아가요.
 
 ### 설치
 
