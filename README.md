@@ -56,13 +56,22 @@ Translate Japanese AA (Ascii Art / Yaruo-style) works in-place on any web page u
 
 ### Installation
 
-Until the extension is published:
+Not yet on the Chrome Web Store. Two ways to install:
+
+**Option A — Download a release (recommended)**
+
+1. Go to the [Releases page](https://github.com/tunaground/AATranslator/releases) and download the latest `aatranslator-<version>.zip`.
+2. Unzip it somewhere you'll keep it (e.g. `~/Applications/aatranslator-<version>/`). Chrome will refer to this folder every time the extension loads, so don't delete it.
+3. Open `chrome://extensions/`, enable **Developer mode** (top right), click **Load unpacked**, and select the unzipped folder.
+4. Click the AATranslator icon in the browser toolbar to open the floating in-page toolbar.
+
+**Option B — Load from source**
 
 1. Clone this repo.
-2. Open `chrome://extensions/`.
-3. Enable **Developer mode** (top right).
-4. Click **Load unpacked** and select this project's root directory.
-5. Click the AATranslator icon in the browser toolbar to open the floating in-page toolbar.
+2. Open `chrome://extensions/`, enable **Developer mode**, click **Load unpacked**, and select the cloned directory.
+3. Click the AATranslator icon to open the toolbar.
+
+Want to build the zip yourself? Run `npm run package` — it writes `dist/aatranslator-<version>.zip`.
 
 ### Configuration
 
@@ -179,13 +188,22 @@ See [PRIVACY.md](PRIVACY.md). In short: nothing leaves your browser except the t
 
 ### 설치
 
-아직 스토어 배포 전이라 unpacked로 로드해야 해요:
+아직 Chrome Web Store 배포 전이라 두 가지 방법 중 골라주세요:
+
+**방법 A — 릴리스 zip 다운로드 (권장)**
+
+1. [Releases 페이지](https://github.com/tunaground/AATranslator/releases)에서 최신 `aatranslator-<version>.zip`을 받으세요.
+2. 계속 보관할 경로(예: `~/Applications/aatranslator-<version>/`)에 압축을 풀어주세요. Chrome이 매번 이 폴더를 참조하니까 지우면 안 돼요.
+3. `chrome://extensions/` 열기 → 우상단 **개발자 모드** 켜기 → **압축해제된 확장 프로그램을 로드합니다** 클릭 → 압축 푼 폴더 선택.
+4. 브라우저 툴바의 AATranslator 아이콘 클릭하면 페이지 우측 하단에 플로팅 툴바가 떠요.
+
+**방법 B — 소스에서 로드**
 
 1. 이 저장소를 clone.
-2. `chrome://extensions/` 열기.
-3. 우상단 **개발자 모드** 켜기.
-4. **압축해제된 확장 프로그램을 로드합니다** 클릭 → 이 프로젝트 루트 선택.
-5. 브라우저 툴바의 AATranslator 아이콘 클릭하면 페이지 우측 하단에 플로팅 툴바가 떠요.
+2. `chrome://extensions/` → **개발자 모드** → **압축해제된 확장 프로그램을 로드합니다** → clone한 폴더 선택.
+3. 확장 아이콘 클릭해서 툴바 열기.
+
+직접 zip을 빌드하고 싶다면: `npm run package` 실행하면 `dist/aatranslator-<version>.zip`이 생성돼요.
 
 ### 설정
 
