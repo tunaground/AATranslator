@@ -4,6 +4,8 @@ Translate Japanese AA (Ascii Art / Yaruo-style) works in-place on any web page u
 
 > 브라우저에서 일본어 AA(아스키 아트 / 야루오계) 작품을 LLM으로 그 자리에서 번역합니다. ASCII 아트는 그대로 두고 의미 있는 일본어만 번역돼요.
 
+![AATranslator in action — Japanese dialogue translated to Korean while the ASCII art is preserved](docs/images/example.png)
+
 ---
 
 ## Table of Contents
@@ -13,6 +15,7 @@ Translate Japanese AA (Ascii Art / Yaruo-style) works in-place on any web page u
   - [How It Works](#how-it-works)
   - [Installation](#installation)
   - [Configuration](#configuration)
+  - [Getting a Gemini API key](#getting-a-gemini-api-key)
   - [Usage](#usage)
   - [Supported Providers](#supported-providers)
   - [Development](#development)
@@ -23,6 +26,7 @@ Translate Japanese AA (Ascii Art / Yaruo-style) works in-place on any web page u
   - [동작 방식](#동작-방식)
   - [설치](#설치)
   - [설정](#설정)
+  - [Gemini API 키 발급](#gemini-api-키-발급)
   - [사용법](#사용법)
   - [지원 Provider](#지원-provider)
   - [개발](#개발)
@@ -85,6 +89,21 @@ Click the **Settings** button on the floating toolbar. All values are stored in 
 | Concurrency | `3` | Parallel in-flight batches (1 / 2 / 3 / 5 / 8 / 10) |
 | Target Language | `한국어` | Translation output language (Korean / English / Japanese) |
 | Highlight Color | Light green | 5 color presets + transparent |
+
+### Getting a Gemini API key
+
+The default provider is Google Gemini, and `gemini-2.5-flash-lite` ships with a generous free-tier quota. AATranslator automatically throttles requests to stay under the free-tier rate limit, so you don't have to manage concurrency yourself.
+
+1. Open [Google AI Studio → API keys](https://aistudio.google.com/apikey) and sign in with your Google account.
+2. Click **API 키 만들기 / Create API key** (top right). Give the key a name and leave the default Gemini project selected, then click **키 만들기 / Create key**.
+
+   ![Create Gemini API key dialog](docs/images/generate-a-api-key.png)
+
+3. The new key appears in the list. Hover over the row and click the **Copy API key** icon.
+
+   ![Copy Gemini API key](docs/images/copy-the-api-key.png)
+
+4. Open AATranslator's **Settings** from the floating toolbar. Confirm Provider is `Google Gemini` and Model is `gemini-2.5-flash-lite`, paste the copied key into **API Key**, and click **저장 / Save**. The warning indicator on the Settings button should disappear once both Model and API Key are filled in.
 
 ### Usage
 
@@ -219,6 +238,21 @@ Version history is tracked in [CHANGELOG.md](CHANGELOG.md).
 | 동시 실행 수 | `3` | 병렬 배치 수 (1 / 2 / 3 / 5 / 8 / 10) |
 | 번역 대상 언어 | `한국어` | 번역 결과 언어 (한국어 / 영어 / 일본어) |
 | 강조 색상 | 연녹색 | 5가지 프리셋 + 투명 |
+
+### Gemini API 키 발급
+
+기본 provider는 Google Gemini고, `gemini-2.5-flash-lite`는 무료 플랜에 넉넉한 쿼터가 포함돼 있어요. AATranslator가 무료 플랜 rate limit 아래로 자동 조절해주니 동시성을 직접 관리할 필요 없어요.
+
+1. [Google AI Studio → API 키](https://aistudio.google.com/apikey)를 열고 구글 계정으로 로그인하세요.
+2. 우상단 **API 키 만들기** 클릭. 키 이름을 지정하고 Default Gemini Project를 그대로 둔 다음 **키 만들기** 클릭.
+
+   ![Gemini API 키 만들기 대화상자](docs/images/generate-a-api-key.png)
+
+3. 목록에 새 키가 추가돼요. 행에 마우스를 올리면 나타나는 **Copy API key** 아이콘을 클릭해 복사하세요.
+
+   ![Gemini API 키 복사](docs/images/copy-the-api-key.png)
+
+4. 페이지 우하단 AATranslator 툴바의 **설정** 버튼을 열어서 Provider가 `Google Gemini`, Model이 `gemini-2.5-flash-lite`인지 확인하고, **API Key** 칸에 복사한 키를 붙여넣은 뒤 **저장**. Model과 API Key가 모두 채워지면 설정 버튼의 ⚠ 경고 표시가 사라져요.
 
 ### 사용법
 
