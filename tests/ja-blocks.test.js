@@ -4,6 +4,7 @@ import {
   isJaBlock,
   extractJaBlocks,
   isStillJapanese,
+  isRomanizeOutputValid,
   SPLIT_RE,
 } from "../src/core/ja-blocks.js";
 
@@ -69,6 +70,65 @@ test("isStillJapanese: no japanese is false", () => {
 
 test("isStillJapanese: empty is false", () => {
   assert.equal(isStillJapanese(""), false);
+});
+
+test("isStillJapanese: Chinese translation not flagged when target is zh_CN", () => {
+  assert.equal(isStillJapanese("简体中文翻译示例", "zh_CN"), false);
+});
+
+test("isStillJapanese: Chinese translation not flagged when target is zh_TW", () => {
+  assert.equal(isStillJapanese("繁體中文翻譯範例", "zh_TW"), false);
+});
+
+test("isStillJapanese: Japanese kana still detected for Chinese target", () => {
+  assert.equal(isStillJapanese("これは日本語です", "zh_CN"), true);
+  assert.equal(isStillJapanese("これは日本語です", "zh_TW"), true);
+});
+
+test("isStillJapanese: pure kanji passage flagged for ko/en target (default)", () => {
+  assert.equal(isStillJapanese("日本語翻訳例"), true);
+});
+
+test("isStillJapanese: Chinese hanzi with trace kana is still Japanese for zh target", () => {
+  assert.equal(isStillJapanese("これは中文です", "zh_CN"), true);
+});
+
+test("isRomanizeOutputValid: empty output is rejected", () => {
+  assert.equal(isRomanizeOutputValid("anything", ""), false);
+});
+
+test("isRomanizeOutputValid: input with <5 CJK accepts any output", () => {
+  assert.equal(isRomanizeOutputValid("やる夫", "Yaruo"), true);
+});
+
+test("isRomanizeOutputValid: kana-dominant input accepts pure romaji output", () => {
+  assert.equal(
+    isRomanizeOutputValid(
+      "やる夫は斜陽の国で生き抜くようです",
+      "yaruo shayou no kuni de ikinuku you desu",
+    ),
+    true,
+  );
+});
+
+test("isRomanizeOutputValid: hanzi-dominant input rejects when CJK dropped", () => {
+  assert.equal(
+    isRomanizeOutputValid(
+      "やる夫似乎要在斜阳之国生存下去",
+      "Yaruo sembra sopravvivere nel paese del sole al tramonto",
+    ),
+    false,
+  );
+});
+
+test("isRomanizeOutputValid: hanzi-dominant input accepts when CJK preserved", () => {
+  assert.equal(
+    isRomanizeOutputValid(
+      "やる夫似乎要在斜阳之国生存下去",
+      "Yaruo似乎要在斜阳之国生存下去",
+    ),
+    true,
+  );
 });
 
 test("SPLIT_RE: splits whitespace", () => {

@@ -1,6 +1,6 @@
 {
   "name": "aatranslator",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Translate Japanese AA (Ascii Art / Yaruo) works in-place using LLMs",
   "type": "module",
   "private": true,

@@ -1,0 +1,36 @@
+{
+  "app_description": {
+    "message": "使用 LLM 直接在頁面上翻譯日本 AA（ASCII 藝術 / やる夫）作品"
+  },
+  "toolbar_select": { "message": "選擇區域" },
+  "toolbar_needs_setup": { "message": "⚠ 需要設定" },
+  "toolbar_selecting_hint": { "message": "點擊要翻譯的區域" },
+  "toolbar_cancel": { "message": "取消" },
+  "toolbar_block_count": {
+    "message": "$COUNT$ 個區塊",
+    "placeholders": { "count": { "content": "$1", "example": "42" } }
+  },
+  "toolbar_translate_all": { "message": "全部翻譯" },
+  "toolbar_reselect": { "message": "重新選擇" },
+  "toolbar_reset": { "message": "重設" },
+  "toolbar_highlight_on": { "message": "高亮 開" },
+  "toolbar_highlight_off": { "message": "高亮 關" },
+  "toolbar_settings": { "message": "設定" },
+  "settings_title": { "message": "AATranslator 設定" },
+  "settings_provider": { "message": "服務商" },
+  "settings_api_key": { "message": "API 金鑰" },
+  "settings_model": { "message": "模型" },
+  "settings_concurrency": { "message": "並行數" },
+  "settings_target_language": { "message": "目標語言" },
+  "settings_highlight_color": { "message": "高亮顏色" },
+  "settings_save": { "message": "儲存" },
+  "settings_close": { "message": "關閉" },
+  "provider_ollama": { "message": "Ollama（本機）" },
+  "color_light_green": { "message": "淺綠" },
+  "color_light_blue": { "message": "淺藍" },
+  "color_light_yellow": { "message": "淺黃" },
+  "color_light_purple": { "message": "淺紫" },
+  "color_light_red": { "message": "淺紅" },
+  "color_transparent": { "message": "透明" },
+  "popup_translate": { "message": "翻譯" }
+}

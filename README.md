@@ -45,7 +45,7 @@ Translate Japanese AA (Ascii Art / Yaruo-style) works in-place on any web page u
 - **Manual selection** — drag-select arbitrary text and click the "Translate" popup
 - **4 LLM providers** — OpenAI, Google Gemini, Anthropic Claude, Ollama (local)
 - **Rate limiting & retries** — per-provider RPM gate (Gemini free-tier friendly) plus 5-attempt exponential backoff on 429 / 503 / 529
-- **i18n UI** — toolbar and settings available in Korean, English, and Japanese (follows Chrome's language)
+- **i18n UI** — toolbar and settings available in Korean, English, Simplified Chinese, and Traditional Chinese (follows Chrome's language)
 - **Highlight customization** — 6 color presets for translated blocks, or transparent
 - **No telemetry** — settings live in `chrome.storage.sync`; only your translated text is sent to the LLM you configured
 
@@ -60,16 +60,18 @@ Translate Japanese AA (Ascii Art / Yaruo-style) works in-place on any web page u
 
 ### Installation
 
-Not yet on the Chrome Web Store. Two ways to install:
+**Option A — Chrome Web Store (recommended)**
 
-**Option A — Download a release (recommended)**
+Install from the [Chrome Web Store listing](https://chromewebstore.google.com/detail/pceehgmpdgpcliaofdfjldleehkacbcd). Click **Add to Chrome** and confirm.
+
+**Option B — Download a release zip**
 
 1. Go to the [Releases page](https://github.com/tunaground/AATranslator/releases) and download the latest `aatranslator-<version>.zip`.
 2. Unzip it somewhere you'll keep it (e.g. `~/Applications/aatranslator-<version>/`). Chrome will refer to this folder every time the extension loads, so don't delete it.
 3. Open `chrome://extensions/`, enable **Developer mode** (top right), click **Load unpacked**, and select the unzipped folder.
 4. Click the AATranslator icon in the browser toolbar to open the floating in-page toolbar.
 
-**Option B — Load from source**
+**Option C — Load from source**
 
 1. Clone this repo.
 2. Open `chrome://extensions/`, enable **Developer mode**, click **Load unpacked**, and select the cloned directory.
@@ -87,7 +89,7 @@ Click the **Settings** button on the floating toolbar. All values are stored in 
 | Model | `gemini-2.5-flash-lite` | Any model name the provider accepts |
 | API Key | *(empty)* | Not required for Ollama |
 | Concurrency | `3` | Parallel in-flight batches (1 / 2 / 3 / 5 / 8 / 10) |
-| Target Language | `한국어` | Translation output language (Korean / English / Japanese) |
+| Target Language | *browser-derived* | Translation output language (Korean / English / Simplified Chinese / Traditional Chinese). On first install, picked from the Chrome UI language; falls back to English for unsupported languages. |
 | Highlight Color | Light green | 5 color presets + transparent |
 
 The default **Concurrency** (3) is safe for Gemini's free tier: the rate gate throttles Gemini calls to ~13 RPM regardless of the concurrency setting, so higher values don't increase the effective request rate on Gemini. Concurrency meaningfully increases throughput only for OpenAI, Claude, and Ollama (where no gate applies). You don't need to lower it to 1 just because you're on the free plan.
@@ -120,7 +122,7 @@ Extra controls:
 
 - **HL ON/OFF** — toggle the translation highlight color
 - **Reselect** — pick a different container
-- **Reset** — unwrap all spans and start over
+- **Reset** — clear translations only; the selection stays so you can immediately re-run Translate All
 - **Cancel** — stop a running "Translate All"
 
 ### Supported Providers
@@ -143,7 +145,7 @@ Requires Node 18+ (uses the built-in test runner). Zero npm dependencies.
 npm test
 ```
 
-Current test coverage: **52 tests** across `ja-blocks`, `batches`, `prompts`, `parse`, and `providers`.
+Current test coverage: **78 tests** across `ja-blocks`, `target-lang`, `batches`, `prompts`, `parse`, and `providers`.
 
 The content layer (`src/content/*.js`) is intentionally not unit-tested — it's thin glue and is verified manually by loading the unpacked extension.
 
@@ -154,11 +156,12 @@ AATranslator/
 ├── manifest.json              # Chrome MV3 manifest
 ├── package.json               # ES modules, "node --test" script
 ├── icons/                     # 48px / 128px extension icons
-├── _locales/{ko,en,ja}/       # i18n message bundles
+├── _locales/{ko,en,zh_CN,zh_TW}/  # i18n message bundles
 ├── src/
 │   ├── background.js          # Service worker — LLM proxy with retry
 │   ├── core/                  # Pure, unit-tested modules
-│   │   ├── ja-blocks.js       #   Japanese token detection
+│   │   ├── ja-blocks.js       #   Japanese token detection + romanize check
+│   │   ├── target-lang.js     #   Target language validation + browser default
 │   │   ├── batches.js         #   Char-count packing
 │   │   ├── prompts.js         #   LLM prompt builders
 │   │   ├── parse.js           #   Response parsers (JSON + fences)
@@ -196,7 +199,7 @@ Version history is tracked in [CHANGELOG.md](CHANGELOG.md).
 - **수동 선택** — 마우스로 드래그한 범위를 "번역" 팝업으로 번역
 - **4개 LLM provider** — OpenAI, Google Gemini, Anthropic Claude, Ollama (로컬)
 - **레이트 리밋 & 재시도** — provider별 RPM 게이트 (Gemini 무료 티어 호환) + 429 / 503 / 529에 대해 5회 지수 백오프
-- **UI 다국어** — 툴바·설정이 한국어·영어·일본어 (크롬 언어에 따라 자동)
+- **UI 다국어** — 툴바·설정이 한국어·영어·중국어 간체/번체 (크롬 언어에 따라 자동)
 - **강조 색상 커스터마이즈** — 5가지 프리셋 + 투명
 - **텔레메트리 없음** — 설정은 `chrome.storage.sync`에만 저장, 직접 번역한 텍스트만 설정한 LLM으로 전송
 
@@ -211,16 +214,18 @@ Version history is tracked in [CHANGELOG.md](CHANGELOG.md).
 
 ### 설치
 
-아직 Chrome Web Store 배포 전이라 두 가지 방법 중 골라주세요:
+**방법 A — Chrome Web Store (권장)**
 
-**방법 A — 릴리스 zip 다운로드 (권장)**
+[Chrome Web Store 페이지](https://chromewebstore.google.com/detail/pceehgmpdgpcliaofdfjldleehkacbcd)에서 **Chrome에 추가** 버튼으로 설치하세요.
+
+**방법 B — 릴리스 zip 다운로드**
 
 1. [Releases 페이지](https://github.com/tunaground/AATranslator/releases)에서 최신 `aatranslator-<version>.zip`을 받으세요.
 2. 계속 보관할 경로(예: `~/Applications/aatranslator-<version>/`)에 압축을 풀어주세요. Chrome이 매번 이 폴더를 참조하니까 지우면 안 돼요.
 3. `chrome://extensions/` 열기 → 우상단 **개발자 모드** 켜기 → **압축해제된 확장 프로그램을 로드합니다** 클릭 → 압축 푼 폴더 선택.
 4. 브라우저 툴바의 AATranslator 아이콘 클릭하면 페이지 우측 하단에 플로팅 툴바가 떠요.
 
-**방법 B — 소스에서 로드**
+**방법 C — 소스에서 로드**
 
 1. 이 저장소를 clone.
 2. `chrome://extensions/` → **개발자 모드** → **압축해제된 확장 프로그램을 로드합니다** → clone한 폴더 선택.
@@ -238,7 +243,7 @@ Version history is tracked in [CHANGELOG.md](CHANGELOG.md).
 | Model | `gemini-2.5-flash-lite` | provider가 허용하는 모델명 |
 | API Key | *(비어있음)* | Ollama는 불필요 |
 | 동시 실행 수 | `3` | 병렬 배치 수 (1 / 2 / 3 / 5 / 8 / 10) |
-| 번역 대상 언어 | `한국어` | 번역 결과 언어 (한국어 / 영어 / 일본어) |
+| 번역 대상 언어 | *브라우저 언어 기반* | 번역 결과 언어 (한국어 / 영어 / 简体中文 / 繁體中文). 최초 설치 시 Chrome UI 언어로 자동 선택, 지원되지 않는 언어는 영어로 fallback. |
 | 강조 색상 | 연녹색 | 5가지 프리셋 + 투명 |
 
 기본값 **동시 실행 수**(3)는 Gemini 무료 플랜에서도 안전해요. Gemini 요청은 concurrency 설정과 무관하게 rate gate가 ~13 RPM으로 조절하기 때문에, 값을 높여도 Gemini로 나가는 실제 요청 속도는 변하지 않아요. Concurrency가 실제로 처리량에 영향을 주는 건 OpenAI · Claude · Ollama처럼 게이트가 적용되지 않는 provider뿐이에요. 무료 플랜이라고 해서 1로 낮출 필요 없어요.
@@ -271,7 +276,7 @@ Version history is tracked in [CHANGELOG.md](CHANGELOG.md).
 
 - **강조 ON/OFF** — 번역 블록 강조 색 토글
 - **다시 선택** — 다른 영역 선택
-- **초기화** — 래핑 해제하고 처음 상태로
+- **초기화** — 번역만 되돌리고 선택은 유지 (바로 전체 번역 다시 실행 가능)
 - **취소** — 진행 중인 전체 번역 중단
 
 ### 지원 Provider
@@ -294,7 +299,7 @@ Node 18+ 필요 (내장 테스트 러너 사용). npm 의존성 0개.
 npm test
 ```
 
-현재 커버리지: `ja-blocks`, `batches`, `prompts`, `parse`, `providers` 5개 모듈에 걸쳐 **52개 테스트**.
+현재 커버리지: `ja-blocks`, `target-lang`, `batches`, `prompts`, `parse`, `providers` 6개 모듈에 걸쳐 **78개 테스트**.
 
 콘텐츠 레이어(`src/content/*.js`)는 의도적으로 단위 테스트하지 않아요 — 얇은 글루 코드이고, unpacked 로 로드해서 수동 검증해요.
 
@@ -305,11 +310,12 @@ AATranslator/
 ├── manifest.json              # Chrome MV3 manifest
 ├── package.json               # ES modules, "node --test" 스크립트
 ├── icons/                     # 48px / 128px 확장 아이콘
-├── _locales/{ko,en,ja}/       # i18n 메시지 번들
+├── _locales/{ko,en,zh_CN,zh_TW}/  # i18n 메시지 번들
 ├── src/
 │   ├── background.js          # 서비스 워커 — 재시도 포함 LLM 프록시
 │   ├── core/                  # 순수, 단위 테스트되는 모듈
-│   │   ├── ja-blocks.js       #   일본어 토큰 감지
+│   │   ├── ja-blocks.js       #   일본어 토큰 감지 + 로마자화 검증
+│   │   ├── target-lang.js     #   타겟 언어 검증 + 브라우저 기본값
 │   │   ├── batches.js         #   문자 수 기반 배치 패킹
 │   │   ├── prompts.js         #   LLM 프롬프트 빌더
 │   │   ├── parse.js           #   응답 파서 (JSON + 코드 펜스)

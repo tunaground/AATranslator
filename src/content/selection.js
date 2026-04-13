@@ -1,5 +1,11 @@
 import { state } from "./state.js";
-import { wrapJaBlocks, unwrapBlocks, applyTranslation, setSpanText } from "./dom.js";
+import {
+  wrapJaBlocks,
+  unwrapBlocks,
+  resetTranslatedBlocks,
+  applyTranslation,
+  setSpanText,
+} from "./dom.js";
 import { onBlockClick, translateBlockText } from "./translate-flow.js";
 import { t } from "./i18n.js";
 
@@ -68,14 +74,14 @@ function onSelectClick(e) {
   currentUpdateUI?.();
 }
 
-export function resetAll(updateUI) {
-  if (state.selectedContainer) {
-    unwrapBlocks(state.selectedContainer);
-    state.selectedContainer.classList.remove("aat-selected");
-    state.selectedContainer = null;
-  }
+export function resetTranslations(updateUI) {
   state.cancelFlag = true;
-  state.mode = "idle";
+  if (state.selectedContainer) {
+    resetTranslatedBlocks(state.selectedContainer);
+  }
+  state.translatedCount = 0;
+  state.totalCount = 0;
+  state.mode = state.selectedContainer ? "ready" : "idle";
   updateUI();
 }
 

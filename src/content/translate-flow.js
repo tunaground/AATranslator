@@ -1,29 +1,70 @@
 import { state } from "./state.js";
 import { callLLM } from "./llm.js";
 import { applyTranslation, toggleSpan, setSpanText } from "./dom.js";
-import { isStillJapanese } from "../core/ja-blocks.js";
-import { buildBlockPrompt, buildBatchPrompt, formatBatchUser } from "../core/prompts.js";
+import { isStillJapanese, isRomanizeOutputValid } from "../core/ja-blocks.js";
+import {
+  buildBlockPrompt,
+  buildBatchPrompt,
+  buildRomanizePrompt,
+  buildRomanizeBatchPrompt,
+  formatBatchUser,
+} from "../core/prompts.js";
 import { parseBlockResponse, parseBatchResponse } from "../core/parse.js";
 import { buildBatches } from "../core/batches.js";
 
+async function romanizeText(text) {
+  try {
+    const raw = await callLLM(buildRomanizePrompt(), text);
+    const cleaned = raw
+      .replace(/```[a-z]*\n?/gi, "")
+      .replace(/```/g, "")
+      .trim()
+      .replace(/^["']|["']$/g, "");
+    if (!cleaned || !isRomanizeOutputValid(text, cleaned)) return text;
+    return cleaned;
+  } catch {
+    return text;
+  }
+}
+
+async function romanizeBatch(texts) {
+  try {
+    const raw = await callLLM(buildRomanizeBatchPrompt(), formatBatchUser(texts));
+    const parsed = parseBatchResponse(raw);
+    return texts.map((t, i) => {
+      const entry = parsed.find((p) => p.i === i);
+      if (!entry || !entry.t) return t;
+      return isRomanizeOutputValid(t, entry.t) ? entry.t : t;
+    });
+  } catch {
+    return texts;
+  }
+}
+
 export async function translateBlockText(text) {
   const systemPrompt = buildBlockPrompt(state.targetLang);
-  for (let attempt = 0; attempt < 3; attempt++) {
-    const raw = await callLLM(systemPrompt, text);
+  for (let attempt = 0; attempt < 2; attempt++) {
+    let raw;
     try {
-      const parsed = parseBlockResponse(raw);
-      if (parsed.meaningful && parsed.translation) {
-        if (parsed.translation.trim() === text.trim()) continue;
-        if (isStillJapanese(parsed.translation) && attempt < 2) continue;
-        return { meaningful: true, translated: parsed.translation };
-      }
-      return { meaningful: false, translated: text };
+      raw = await callLLM(systemPrompt, text);
     } catch {
-      const trimmed = raw.trim();
-      if (trimmed && trimmed !== text.trim() && !isStillJapanese(trimmed)) {
-        return { meaningful: true, translated: trimmed };
-      }
+      continue;
     }
+    let parsed;
+    try {
+      parsed = parseBlockResponse(raw);
+    } catch {
+      continue;
+    }
+    if (!parsed.meaningful || !parsed.translation) {
+      return { meaningful: false, translated: text };
+    }
+    if (parsed.translation.trim() === text.trim()) continue;
+    if (isStillJapanese(parsed.translation, state.targetLang)) {
+      const romanized = await romanizeText(parsed.translation);
+      return { meaningful: true, translated: romanized };
+    }
+    return { meaningful: true, translated: parsed.translation };
   }
   return { meaningful: false, translated: text };
 }
@@ -54,35 +95,52 @@ export async function translateBatchSpans(spans, updateUI) {
   const systemPrompt = buildBatchPrompt(state.targetLang);
   const texts = spans.map((s) => s.dataset.original);
   const userMsg = formatBatchUser(texts);
+  let parsed;
   try {
     const raw = await callLLM(systemPrompt, userMsg);
-    const parsed = parseBatchResponse(raw);
-    const failed = [];
-    for (let i = 0; i < spans.length; i++) {
-      if (state.cancelFlag) break;
-      const span = spans[i];
-      const entry = parsed.find((p) => p.i === i);
-      if (!entry) {
-        failed.push(span);
-      } else if (
-        entry.m &&
-        entry.t &&
-        entry.t.trim() !== texts[i].trim() &&
-        !isStillJapanese(entry.t)
-      ) {
-        applyTranslation(span, entry.t);
-        state.translatedCount++;
-        updateUI?.();
-      } else {
-        span.classList.remove("aat-translating");
-        state.translatedCount++;
-        updateUI?.();
-      }
-    }
-    return failed;
+    parsed = parseBatchResponse(raw);
   } catch {
     return spans;
   }
+
+  const failed = [];
+  const pendingRomanize = [];
+  for (let i = 0; i < spans.length; i++) {
+    if (state.cancelFlag) break;
+    const span = spans[i];
+    const entry = parsed.find((p) => p.i === i);
+    if (!entry) {
+      failed.push(span);
+      continue;
+    }
+    const hasTranslation =
+      entry.m && entry.t && entry.t.trim() !== texts[i].trim();
+    if (!hasTranslation) {
+      span.classList.remove("aat-translating");
+      state.translatedCount++;
+      updateUI?.();
+      continue;
+    }
+    if (isStillJapanese(entry.t, state.targetLang)) {
+      pendingRomanize.push({ span, partial: entry.t });
+    } else {
+      applyTranslation(span, entry.t);
+      state.translatedCount++;
+      updateUI?.();
+    }
+  }
+
+  if (pendingRomanize.length > 0 && !state.cancelFlag) {
+    const romanized = await romanizeBatch(pendingRomanize.map((p) => p.partial));
+    for (let k = 0; k < pendingRomanize.length; k++) {
+      if (state.cancelFlag) break;
+      applyTranslation(pendingRomanize[k].span, romanized[k]);
+      state.translatedCount++;
+      updateUI?.();
+    }
+  }
+
+  return failed;
 }
 
 export async function onBlockClick(e) {

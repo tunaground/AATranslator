@@ -40,6 +40,16 @@ export function unwrapBlocks(container) {
   container.normalize();
 }
 
+export function resetTranslatedBlocks(container) {
+  const spans = container.querySelectorAll(".aat-block");
+  for (const span of spans) {
+    span.classList.remove("aat-translated", "aat-translating");
+    delete span.dataset.translated;
+    delete span.dataset.showing;
+    setSpanText(span, span.dataset.original);
+  }
+}
+
 export function setSpanText(span, text) {
   span.innerHTML = "";
   const lines = text.split("\n");

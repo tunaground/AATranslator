@@ -1,8 +1,9 @@
 import { state, loadSettings } from "./state.js";
 import { applyHighlightStyle } from "./dom.js";
-import { startSelecting, cancelSelecting, resetAll } from "./selection.js";
+import { startSelecting, cancelSelecting, resetTranslations } from "./selection.js";
 import { translateAll } from "./translate-flow.js";
 import { t } from "./i18n.js";
+import { coerceTarget } from "../core/target-lang.js";
 
 function version() {
   try {
@@ -94,7 +95,7 @@ export function updateToolbar() {
   q("#aat-cancel-select")?.addEventListener("click", () => cancelSelecting(updateToolbar));
   q("#aat-translate-all")?.addEventListener("click", () => translateAll(updateToolbar));
   q("#aat-reselect")?.addEventListener("click", () => startSelecting(updateToolbar));
-  q("#aat-reset")?.addEventListener("click", () => resetAll(updateToolbar));
+  q("#aat-reset")?.addEventListener("click", () => resetTranslations(updateToolbar));
   q("#aat-cancel")?.addEventListener("click", () => {
     state.cancelFlag = true;
     document.querySelectorAll(".aat-block.aat-translating").forEach((el) =>
@@ -151,7 +152,8 @@ export function toggleSettings() {
       <select id="aat-s-lang">
         <option value="ko">한국어</option>
         <option value="en">English</option>
-        <option value="ja">日本語</option>
+        <option value="zh_CN">简体中文</option>
+        <option value="zh_TW">繁體中文</option>
       </select>
     </div>
     <div class="aat-settings-group">
@@ -188,7 +190,7 @@ export function toggleSettings() {
       if (data.apiKey) kEl.value = data.apiKey;
       mEl.value = data.model || "gemini-2.5-flash-lite";
       cEl.value = String(data.concurrency || 3);
-      lEl.value = data.targetLang || "ko";
+      lEl.value = coerceTarget(data.targetLang, chrome.i18n.getUILanguage());
       if (data.highlightColor) hlcEl.value = data.highlightColor;
       kRow.style.display = pEl.value === "ollama" ? "none" : "block";
     },

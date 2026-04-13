@@ -1,9 +1,10 @@
+import { coerceTarget, pickInitialTarget } from "../core/target-lang.js";
+
 export const DEFAULTS = {
   provider: "gemini",
   model: "gemini-2.5-flash-lite",
   apiKey: "",
   concurrency: 3,
-  targetLang: "ko",
   highlightColor: "rgba(34, 197, 94, 0.1)",
 };
 
@@ -13,7 +14,14 @@ export const state = {
   toolbar: null,
   settingsModal: null,
   config: null,
-  targetLang: DEFAULTS.targetLang,
+  // Guard: module may be imported before chrome.i18n is ready (e.g. under a
+  // test harness). loadSettings() is always called at extension runtime and
+  // does not need the guard.
+  targetLang: pickInitialTarget(
+    typeof chrome !== "undefined" && chrome.i18n
+      ? chrome.i18n.getUILanguage()
+      : "",
+  ),
   highlightOn: true,
   highlightColor: DEFAULTS.highlightColor,
   translatedCount: 0,
@@ -35,7 +43,10 @@ export function loadSettings() {
           model: data.model || DEFAULTS.model,
           concurrency: data.concurrency || DEFAULTS.concurrency,
         };
-        state.targetLang = data.targetLang || DEFAULTS.targetLang;
+        state.targetLang = coerceTarget(
+          data.targetLang,
+          chrome.i18n.getUILanguage(),
+        );
         state.highlightColor = data.highlightColor || DEFAULTS.highlightColor;
         resolve();
       },
