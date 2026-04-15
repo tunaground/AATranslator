@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-04-15
+
+### Added
+
+- **Browser built-in translator** provider — uses the W3C `self.Translator` API (Chrome 138+). Feature-detected: the option only appears in the settings dropdown on supporting browsers. No API key and no model field required. Manual block-click only; the "Translate All" button is hidden for this provider because the on-device API cannot judge whether a block is meaningful vs decorative AA.
+
+### Changed
+
+- **Provider validation on load.** `loadSettings` now whitelists known providers (plus `browser` when `self.Translator` exists). A config synced from a supporting browser to a non-supporting one falls back to the default instead of leaving the extension in an invalid state.
+- **Settings modal fallback.** If the stored provider is not present as a `<option>` in the dropdown (e.g. `browser` on a non-supporting browser), the select is reset to the default instead of silently drifting to whichever option happens to be visually first.
+
 ## [0.2.0] - 2026-04-13
 
 ### Added
@@ -61,6 +72,7 @@ Initial release.
 - **Release packaging** — `npm run package` produces `dist/aatranslator-<version>.zip`; a GitHub Actions workflow attaches the zip to a release on `v*.*.*` tag push.
 - **Privacy policy** — `PRIVACY.md` describes what's stored locally and what's sent to LLM providers.
 
-[Unreleased]: https://github.com/tunaground/AATranslator/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/tunaground/AATranslator/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/tunaground/AATranslator/releases/tag/v0.3.0
 [0.2.0]: https://github.com/tunaground/AATranslator/releases/tag/v0.2.0
 [0.1.0]: https://github.com/tunaground/AATranslator/releases/tag/v0.1.0

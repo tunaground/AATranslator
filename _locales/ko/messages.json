@@ -26,6 +26,7 @@
   "settings_save": { "message": "저장" },
   "settings_close": { "message": "닫기" },
   "provider_ollama": { "message": "Ollama (로컬)" },
+  "provider_browser": { "message": "브라우저 내장 번역" },
   "color_light_green": { "message": "연녹색" },
   "color_light_blue": { "message": "연파랑" },
   "color_light_yellow": { "message": "연노랑" },

@@ -43,7 +43,7 @@ Translate Japanese AA (Ascii Art / Yaruo-style) works in-place on any web page u
 - **Click to translate** — click any highlighted block to translate a single phrase; click again to toggle between original and translation
 - **Translate all** — batch-translate every block in a selected container with configurable concurrency
 - **Manual selection** — drag-select arbitrary text and click the "Translate" popup
-- **4 LLM providers** — OpenAI, Google Gemini, Anthropic Claude, Ollama (local)
+- **5 providers** — OpenAI, Google Gemini, Anthropic Claude, Ollama (local), and the browser's built-in translator (Chrome 138+, zero-config, no API key)
 - **Rate limiting & retries** — per-provider RPM gate (Gemini free-tier friendly) plus 5-attempt exponential backoff on 429 / 503 / 529
 - **i18n UI** — toolbar and settings available in Korean, English, Simplified Chinese, and Traditional Chinese (follows Chrome's language)
 - **Highlight customization** — 6 color presets for translated blocks, or transparent
@@ -85,9 +85,9 @@ Click the **Settings** button on the floating toolbar. All values are stored in 
 
 | Field | Default | Notes |
 |---|---|---|
-| Provider | `Google Gemini` | OpenAI / Gemini / Claude / Ollama |
-| Model | `gemini-2.5-flash-lite` | Any model name the provider accepts |
-| API Key | *(empty)* | Not required for Ollama |
+| Provider | `Google Gemini` | OpenAI / Gemini / Claude / Ollama / Browser built-in (Chrome 138+) |
+| Model | `gemini-2.5-flash-lite` | Any model name the provider accepts; hidden for Browser built-in |
+| API Key | *(empty)* | Not required for Ollama or Browser built-in |
 | Concurrency | `3` | Parallel in-flight batches (1 / 2 / 3 / 5 / 8 / 10) |
 | Target Language | *browser-derived* | Translation output language (Korean / English / Simplified Chinese / Traditional Chinese). On first install, picked from the Chrome UI language; falls back to English for unsupported languages. |
 | Highlight Color | Light green | 5 color presets + transparent |
@@ -133,6 +133,7 @@ Extra controls:
 | Google Gemini | `generativelanguage.googleapis.com` | `generateContent`, `maxOutputTokens: 8192` |
 | Anthropic Claude | `api.anthropic.com` | Messages API, `anthropic-version: 2023-06-01` |
 | Ollama | `http://localhost:11434` | Local only; no API key needed |
+| Browser built-in | `self.Translator` (W3C) | Chrome 138+ only; on-device, no key, no model field. Manual block-click only — the "Translate All" button is hidden since the API cannot judge meaningful vs decorative blocks. First use per language pair downloads a translation model. |
 
 The background worker enforces a minimum **~4.5s interval** between Gemini calls (~13 RPM) to stay safely under the free-tier 15 RPM cap, so you don't need to manage concurrency yourself. Other providers are unthrottled. On top of that, any `429 / 503 / 529` response triggers up to **5 retries** with exponential backoff (max 60s per wait, ~30s cumulative for transient errors).
 
@@ -145,7 +146,7 @@ Requires Node 18+ (uses the built-in test runner). Zero npm dependencies.
 npm test
 ```
 
-Current test coverage: **78 tests** across `ja-blocks`, `target-lang`, `batches`, `prompts`, `parse`, and `providers`.
+Current test coverage: **84 tests** across `ja-blocks`, `target-lang`, `batches`, `prompts`, `parse`, `providers`, and `browser-translator`.
 
 The content layer (`src/content/*.js`) is intentionally not unit-tested — it's thin glue and is verified manually by loading the unpacked extension.
 
@@ -197,7 +198,7 @@ Version history is tracked in [CHANGELOG.md](CHANGELOG.md).
 - **클릭 번역** — 강조된 블록을 클릭하면 한 문장만 번역하고, 다시 누르면 원문/번역 토글
 - **전체 번역** — 선택한 영역 안의 모든 블록을 동시성 설정대로 배치 번역
 - **수동 선택** — 마우스로 드래그한 범위를 "번역" 팝업으로 번역
-- **4개 LLM provider** — OpenAI, Google Gemini, Anthropic Claude, Ollama (로컬)
+- **5개 provider** — OpenAI, Google Gemini, Anthropic Claude, Ollama (로컬), 그리고 브라우저 내장 번역 (Chrome 138+, API 키 불필요, 설정 없음)
 - **레이트 리밋 & 재시도** — provider별 RPM 게이트 (Gemini 무료 티어 호환) + 429 / 503 / 529에 대해 5회 지수 백오프
 - **UI 다국어** — 툴바·설정이 한국어·영어·중국어 간체/번체 (크롬 언어에 따라 자동)
 - **강조 색상 커스터마이즈** — 5가지 프리셋 + 투명
@@ -239,9 +240,9 @@ Version history is tracked in [CHANGELOG.md](CHANGELOG.md).
 
 | 항목 | 기본값 | 비고 |
 |---|---|---|
-| Provider | `Google Gemini` | OpenAI / Gemini / Claude / Ollama |
-| Model | `gemini-2.5-flash-lite` | provider가 허용하는 모델명 |
-| API Key | *(비어있음)* | Ollama는 불필요 |
+| Provider | `Google Gemini` | OpenAI / Gemini / Claude / Ollama / 브라우저 내장 번역 (Chrome 138+) |
+| Model | `gemini-2.5-flash-lite` | provider가 허용하는 모델명; 브라우저 내장 번역에서는 숨김 |
+| API Key | *(비어있음)* | Ollama와 브라우저 내장 번역은 불필요 |
 | 동시 실행 수 | `3` | 병렬 배치 수 (1 / 2 / 3 / 5 / 8 / 10) |
 | 번역 대상 언어 | *브라우저 언어 기반* | 번역 결과 언어 (한국어 / 영어 / 简体中文 / 繁體中文). 최초 설치 시 Chrome UI 언어로 자동 선택, 지원되지 않는 언어는 영어로 fallback. |
 | 강조 색상 | 연녹색 | 5가지 프리셋 + 투명 |
@@ -287,6 +288,7 @@ Version history is tracked in [CHANGELOG.md](CHANGELOG.md).
 | Google Gemini | `generativelanguage.googleapis.com` | `generateContent`, `maxOutputTokens: 8192` |
 | Anthropic Claude | `api.anthropic.com` | Messages API, `anthropic-version: 2023-06-01` |
 | Ollama | `http://localhost:11434` | 로컬 전용; API 키 불필요 |
+| 브라우저 내장 번역 | `self.Translator` (W3C) | Chrome 138+ 전용; 온디바이스, API 키/모델 불필요. 블럭 클릭 번역만 지원 — "전체 번역" 버튼은 숨김 (API가 의미 있는 블럭과 장식 AA를 구분 못 함). 언어쌍별 최초 사용 시 번역 모델 다운로드. |
 
 백그라운드 워커는 Gemini 호출 사이에 최소 **~4.5초 간격**(~13 RPM)을 유지해서 무료 티어 15 RPM 한도를 안전하게 지켜요. 동시성은 사용자가 직접 제어하지 않아도 돼요. 다른 provider는 제한 없음. 그 위에 `429 / 503 / 529` 응답이 오면 **최대 5회** 지수 백오프 재시도 (단일 대기 최대 60초, 일시적 에러에는 누적 ~30초 수준).
 
@@ -299,7 +301,7 @@ Node 18+ 필요 (내장 테스트 러너 사용). npm 의존성 0개.
 npm test
 ```
 
-현재 커버리지: `ja-blocks`, `target-lang`, `batches`, `prompts`, `parse`, `providers` 6개 모듈에 걸쳐 **78개 테스트**.
+현재 커버리지: `ja-blocks`, `target-lang`, `batches`, `prompts`, `parse`, `providers`, `browser-translator` 7개 모듈에 걸쳐 **84개 테스트**.
 
 콘텐츠 레이어(`src/content/*.js`)는 의도적으로 단위 테스트하지 않아요 — 얇은 글루 코드이고, unpacked 로 로드해서 수동 검증해요.
 

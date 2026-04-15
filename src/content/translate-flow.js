@@ -11,6 +11,7 @@ import {
 } from "../core/prompts.js";
 import { parseBlockResponse, parseBatchResponse } from "../core/parse.js";
 import { buildBatches } from "../core/batches.js";
+import { translateBlockBrowser } from "./browser-translator.js";
 
 async function romanizeText(text) {
   try {
@@ -155,9 +156,19 @@ export async function onBlockClick(e) {
 
   span.classList.add("aat-translating");
   try {
-    const result = await translateBlockText(span.dataset.original);
-    if (result.meaningful) {
-      applyTranslation(span, result.translated);
+    if (state.config.provider === "browser") {
+      const translated = await translateBlockBrowser(
+        span.dataset.original,
+        state.targetLang,
+      );
+      if (translated && translated.trim() !== span.dataset.original.trim()) {
+        applyTranslation(span, translated);
+      }
+    } else {
+      const result = await translateBlockText(span.dataset.original);
+      if (result.meaningful) {
+        applyTranslation(span, result.translated);
+      }
     }
   } catch (err) {
     console.error("[AAT] Block click translation failed:", err);

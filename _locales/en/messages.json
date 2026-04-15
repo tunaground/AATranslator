@@ -26,6 +26,7 @@
   "settings_save": { "message": "Save" },
   "settings_close": { "message": "Close" },
   "provider_ollama": { "message": "Ollama (local)" },
+  "provider_browser": { "message": "Browser built-in" },
   "color_light_green": { "message": "Light green" },
   "color_light_blue": { "message": "Light blue" },
   "color_light_yellow": { "message": "Light yellow" },

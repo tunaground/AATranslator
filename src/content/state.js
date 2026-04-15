@@ -37,8 +37,15 @@ export function loadSettings() {
     chrome.storage.sync.get(
       ["provider", "apiKey", "model", "targetLang", "concurrency", "highlightColor"],
       (data) => {
+        const validProviders = ["openai", "gemini", "claude", "ollama"];
+        if (typeof self !== "undefined" && "Translator" in self) {
+          validProviders.push("browser");
+        }
+        const provider = validProviders.includes(data.provider)
+          ? data.provider
+          : DEFAULTS.provider;
         state.config = {
-          provider: data.provider || DEFAULTS.provider,
+          provider,
           apiKey: data.apiKey ?? DEFAULTS.apiKey,
           model: data.model || DEFAULTS.model,
           concurrency: data.concurrency || DEFAULTS.concurrency,

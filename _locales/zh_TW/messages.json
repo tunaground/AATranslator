@@ -26,6 +26,7 @@
   "settings_save": { "message": "儲存" },
   "settings_close": { "message": "關閉" },
   "provider_ollama": { "message": "Ollama（本機）" },
+  "provider_browser": { "message": "瀏覽器內建翻譯" },
   "color_light_green": { "message": "淺綠" },
   "color_light_blue": { "message": "淺藍" },
   "color_light_yellow": { "message": "淺黃" },

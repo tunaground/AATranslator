@@ -43,9 +43,12 @@ export function updateToolbar() {
   if (!state.toolbar) return;
 
   const brand = `<span class="aat-brand">AATranslator <span class="aat-ver">v${version()}</span></span>`;
+  const provider = state.config?.provider;
   const needsSetup =
-    !state.config?.model ||
-    (state.config?.provider !== "ollama" && !state.config?.apiKey);
+    provider === "browser"
+      ? false
+      : !state.config?.model ||
+        (provider !== "ollama" && !state.config?.apiKey);
   const settingsBtnClass = needsSetup ? "aat-btn-warn" : "aat-btn-secondary";
   const settingsLabel = needsSetup
     ? `⚠ ${t("toolbar_settings")}`
@@ -63,9 +66,13 @@ export function updateToolbar() {
       `<button class="aat-btn-secondary" id="aat-cancel-select">${t("toolbar_cancel")}</button>`;
   } else if (state.mode === "ready") {
     const n = state.selectedContainer?.querySelectorAll(".aat-block:not(.aat-translated)").length || 0;
+    const isBrowser = state.config?.provider === "browser";
+    const translateAllBtn = isBrowser
+      ? ""
+      : `<button class="aat-btn-primary" id="aat-translate-all">${t("toolbar_translate_all")}</button>`;
     middle =
       `<span class="aat-status">${t("toolbar_block_count", String(n))}</span>` +
-      `<button class="aat-btn-primary" id="aat-translate-all">${t("toolbar_translate_all")}</button>` +
+      translateAllBtn +
       `<button class="aat-btn-secondary" id="aat-reselect">${t("toolbar_reselect")}</button>` +
       `<button class="aat-btn-danger" id="aat-reset">${t("toolbar_reset")}</button>`;
   } else if (state.mode === "translating") {
@@ -128,7 +135,7 @@ export function toggleSettings() {
         <option value="ollama">${t("provider_ollama")}</option>
       </select>
     </div>
-    <div class="aat-settings-group">
+    <div class="aat-settings-group" id="aat-s-model-row">
       <label>${t("settings_model")}</label>
       <input type="text" id="aat-s-model">
     </div>
@@ -175,10 +182,18 @@ export function toggleSettings() {
   document.body.appendChild(modal);
   state.settingsModal = modal;
 
+  if (typeof self !== "undefined" && "Translator" in self) {
+    const opt = document.createElement("option");
+    opt.value = "browser";
+    opt.textContent = t("provider_browser");
+    modal.querySelector("#aat-s-provider").appendChild(opt);
+  }
+
   const pEl = modal.querySelector("#aat-s-provider");
   const kEl = modal.querySelector("#aat-s-apikey");
   const kRow = modal.querySelector("#aat-s-apikey-row");
   const mEl = modal.querySelector("#aat-s-model");
+  const mRow = modal.querySelector("#aat-s-model-row");
   const cEl = modal.querySelector("#aat-s-concurrency");
   const lEl = modal.querySelector("#aat-s-lang");
   const hlcEl = modal.querySelector("#aat-s-hlcolor");
@@ -186,18 +201,25 @@ export function toggleSettings() {
   chrome.storage.sync.get(
     ["provider", "apiKey", "model", "concurrency", "targetLang", "highlightColor"],
     (data) => {
-      pEl.value = data.provider || "gemini";
+      const stored = data.provider || "gemini";
+      pEl.value = pEl.querySelector(`option[value="${stored}"]`)
+        ? stored
+        : "gemini";
       if (data.apiKey) kEl.value = data.apiKey;
       mEl.value = data.model || "gemini-2.5-flash-lite";
       cEl.value = String(data.concurrency || 3);
       lEl.value = coerceTarget(data.targetLang, chrome.i18n.getUILanguage());
       if (data.highlightColor) hlcEl.value = data.highlightColor;
-      kRow.style.display = pEl.value === "ollama" ? "none" : "block";
+      const hideCreds = pEl.value === "ollama" || pEl.value === "browser";
+      kRow.style.display = hideCreds ? "none" : "block";
+      mRow.style.display = pEl.value === "browser" ? "none" : "block";
     },
   );
 
   pEl.addEventListener("change", () => {
-    kRow.style.display = pEl.value === "ollama" ? "none" : "block";
+    const hideCreds = pEl.value === "ollama" || pEl.value === "browser";
+    kRow.style.display = hideCreds ? "none" : "block";
+    mRow.style.display = pEl.value === "browser" ? "none" : "block";
   });
 
   modal.querySelector("#aat-s-save").addEventListener("click", () => {
